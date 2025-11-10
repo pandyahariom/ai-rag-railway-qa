@@ -1,10 +1,23 @@
 import chromadb
 from google import genai
 from google.api_core import retry
-from google.genai import types
-import time
 
-GOOGLE_API_KEY = "AIzaSyCi3ZMH8rZqfUJ43goE4NvueghF3nuUEC8"
+
+def get_genai_client():
+    """Prompt user for a Google API key and validate it until correct."""
+    while True:
+
+        api_key = input("Enter your Google API key: ").strip()
+
+        try:
+            genai_client = genai.Client(api_key=api_key)
+            genai_client.models.list()
+            return genai_client
+        except genai.errors.APIError as e:
+            print("Please enter a valid API key.\n")
+
+
+genai_client = get_genai_client()
 
 
 # Non-persistent client
@@ -49,8 +62,6 @@ If question is not related to the railway reservation or ticket booking or queri
 If question is related to the railway reservation but not given in the passage, answer with "I can't find the answer in the given passages. Searching for the web for best prediction". And then try to response the question using the web.
 """
 
-
-genai_client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # Helper to retry when per-minute quota is reached.
 is_retriable = lambda e: (isinstance(e, genai.errors.APIError) and e.code in {429, 503})
