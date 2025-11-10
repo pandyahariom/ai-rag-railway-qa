@@ -46,5 +46,5 @@ $ python3 main.py
   
   If the question is not related to the railway reservation system will not respond by searching the out of the passages.
   
-  ![Non-Related Question](assets/non_related_question.png)
+  ![Non-Related Question](assets/nonrelated_question.png)
 
